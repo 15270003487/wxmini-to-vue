@@ -17,4 +17,14 @@ describe('loader/wx/wxjs', () => {
     expect(/created/.test(outputCode2)).toBe(true)
   });
 
+
+  test('测试wxs', () => {
+    const outputCode = wxjs('Page({ data: { x: 1 } })', {wxs: [ {code: 'const a = () => { console.log(1) }; module.exports = {a}', module: 'ttt'} ] })
+
+    expect(/data/.test(outputCode)).toBe(true)
+    expect(/return\s?{/.test(outputCode)).toBe(true)
+    expect(/this\.ttt/.test(outputCode)).toBe(true)
+    expect(/console\.log/.test(outputCode)).toBe(true)
+  });
+
 });

@@ -27,8 +27,8 @@ const transform = {
 module.exports = function (dir, options) {
   const components = readWxComponents(dir)
   return components.map(({ wxml, wxjs, wxss, name }) => {
-    const outputTemplate = transform.wxml(wxml || '', options);
-    const outputJs = transform.wxjs(wxjs || '', options);
+    const { code: outputTemplate, wxsList } = transform.wxml(wxml || '', options);
+    const outputJs = transform.wxjs(wxjs || '', Object.assign(options, { wxs: wxsList }));
     const outputCss = transform.wxss(wxss || '', options);
     // TODO: 额外加一层避免多层情况，后续再改动
     const html = beautify.html(`<div>${outputTemplate}</div>`);

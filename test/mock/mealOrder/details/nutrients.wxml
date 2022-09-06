@@ -1,0 +1,54 @@
+<wxs module="we">
+  var toFixed = function (value) {
+    return value.toFixed(2)
+  }
+  module.exports = {
+    toFixed: toFixed
+  }
+</wxs>
+
+
+<view wx:if="{{isurl}}" class="nutrients">
+  <view class="foodList">
+    <text class="viewbtn viewbtn1" style="margin-left: 10px;">菜品详情</text>
+    <view class="fooditem" wx:for="{{detailRes.itemList}}">
+      <view class="textclass">
+        <view>{{item.productName}}</view>
+        <view>{{item.quantity}}份</view>
+      </view>
+      <view class="textclass">￥{{we.toFixed(item.price/100)}}</view>
+    </view>
+  </view>
+  <view wx:for="{{dishes}}" wx:key="code">
+    <view class="nutrients__title">
+      <image src="../../../images/null.png"></image>
+      <text>{{item.name}}</text>
+    </view>
+    <view class="nutrients__body">
+      <view class="nutrients__body__block" wx:for="{{item.nutrients}}" wx:for-item="item2" wx:key="code">
+        <text>{{item2.name}}</text>
+        <text>{{we.toFixed(item2.netContent) + item2.unit}}</text>
+      </view>
+    </view>
+  </view>
+
+
+  <view>
+    <view class="nutrients__title centenr">
+      <text>营养总量</text>
+    </view>
+    <view class="nutrients__body">
+      <!-- <view class="nutrients__body__block" wx:for="{{nutrients}}" wx:key="code">
+        <text>{{item.name}}</text>
+        <text>{{we.toFixed(item.netContent) + item.unit}}</text>
+      </view> -->
+
+      <view class="nutrients__body__block" wx:for="{{resData}}" wx:key="code">
+        <text>{{item.name}}</text>
+        <text>{{we.toFixed(item.netContent) + item.unit}}</text>
+      </view>
+
+    </view>
+  </view>
+</view>
+<web-view wx:else src="{{url}}"></web-view>

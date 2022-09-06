@@ -1,0 +1,556 @@
+/* pages/mealOrder/details/details.wxss */
+.content {
+  /* height: 100%; */
+  /* margin-bottom: 140rpx; */
+  /* padding-bottom: constant(safe-area-inset-bottom); */
+  /* 兼容 iOS < 11.2 */
+  /* padding-bottom: env(safe-area-inset-bottom); */
+  /* 兼容 iOS >= 11.2 */
+  /* background-color: #F4F4F4; */
+  height: 100%;
+}
+
+.black {
+  font-family: HarmonyOS Sans SC-Regular, HarmonyOS Sans SC;
+  font-weight: 400;
+  font-size: 15px;
+  color: #202020;
+}
+
+.gray {
+  font-size: 12px;
+  font-family: HarmonyOS Sans SC-Light, HarmonyOS Sans SC;
+  font-weight: 300;
+  color: #606060;
+}
+
+.orderStatus {
+  width: 54px;
+  height: 26px;
+  line-height: 26px;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(270deg, #75B55A 0%, #2D9561 100%);
+  border-radius: 0px 16rpx 0px 16rpx;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.viewbtn {
+  position: relative;
+  margin-left: 10px;
+  font-size: 17px;
+}
+
+.viewbtn::before {
+  content: "";
+  width: 6rpx;
+  height: 32rpx;
+  border-radius: 4rpx;
+  position: absolute;
+  top: 4px;
+  left: -10px;
+}
+
+.viewbtn1::before {
+  background: #72B15B;
+}
+
+.foodCon {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+  padding-top: 10px;
+}
+
+.main {
+  margin: auto;
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 15rpx;
+  color: #000;
+  width: 694rpx;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 4px 1px rgba(32, 32, 32, 0.10000000149011612);
+}
+
+.main-top {
+  font-size: 14px;
+  display: flex;
+  background: #E7F3FF;
+}
+
+.main-top>view {
+  width: 30%;
+  text-align: center;
+}
+
+.main-top>view:nth-child(2),
+.main-top>view:nth-child(3) {
+  color: #D22626;
+}
+
+.main-header {
+  padding: 20rpx;
+  position: relative;
+  font-size: 24rpx;
+}
+
+.main-content {
+  padding: 5px 10px;
+  box-sizing: border-box;
+}
+
+.main-content-header {
+  font-size: 28rpx;
+  margin: 2% 0;
+}
+
+.main-content-footer {
+  margin: 4%;
+  text-align: center;
+  align-items: center;
+}
+
+.menu {
+  position: relative;
+  font-size: 28rpx;
+  padding: 20rpx;
+  color: #454346;
+  line-height: 28px;
+}
+
+.foodmenu:after {
+  content: '';
+  width: 100%;
+  height: 1rpx;
+  border-bottom: 1px solid #f4f5f6;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -10%;
+}
+
+.pricetext {
+  font-size: 12px;
+  font-family: HarmonyOS Sans SC-Regular, HarmonyOS Sans SC;
+  font-weight: 400;
+  color: #202020;
+  line-height: 24px;
+}
+
+.price {
+  line-height: 24px;
+  font-size: 20px;
+}
+
+.imageClass {
+  min-width: 58px;
+  height: 25px;
+  font-size: 10px;
+  margin-left: 10px;
+  background: rgba(5, 168, 86, 0.05);
+  background-size: 50% 50%;
+  border-radius: 4px;
+  display: flex;
+  line-height: 24px;
+  padding-right: 4px;
+  color: #05A856;
+  position: relative;
+}
+
+.imageClass image {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  top: -4px;
+}
+
+.footer {
+  /* position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0; */
+  width: 100%;
+  /* background-color: #fff; */
+  padding-bottom: constant(safe-area-inset-bottom);
+  /* 兼容 iOS < 11.2 */
+  padding-bottom: env(safe-area-inset-bottom);
+  /* 兼容 iOS >= 11.2 */
+  /* box-shadow: -4rpx 0 12rpx rgba(0, 0, 0, .1); */
+}
+
+.footer .actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 24rpx 12rpx;
+}
+
+.footer .actions .action-item {
+  margin-right: 24rpx;
+  border-radius: 30rpx;
+  height: 60rpx;
+  padding: 20rpx 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1rpx solid #2AB1E7;
+  box-sizing: border-box;
+  font-size: 24rpx;
+}
+
+.footer .actions .action-item.active {
+  color: #fff;
+  background: linear-gradient(134deg, #4BD891 0%, #05A856 100%);
+}
+
+.progress-box {
+  position: relative;
+}
+
+.proClass {
+  position: absolute;
+  top: -25px;
+  right: 0;
+}
+
+.viewdata {
+  color: #333;
+}
+
+.viewdata_main {
+  display: none;
+}
+
+.viewdata.show .viewdata_main {
+  display: block;
+}
+
+.viewdata .title {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.right-arrow {
+  position: relative;
+  border: solid #666;
+  border-width: 0 1px 1px 0;
+  display: inline-block;
+  padding: 8rpx;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.show .right-arrow {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin-top: -24rpx;
+}
+
+/* 表格样式 */
+.table_box {
+  color: #666;
+  margin-top: 24rpx;
+  font-size: 24rpx;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.table_name {
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #f0f0f0;
+  border-bottom: none;
+  background-color: #f0f0f0;
+  padding: 12rpx 0;
+  color: #000;
+}
+
+.table_title {
+  font-weight: bold;
+  color: #333;
+  font-size: 28rpx;
+}
+
+.table_row {
+  border: 1px solid #f0f0f0;
+  border-bottom: none;
+  /* border-right: none; */
+}
+
+.table_title .table_item,
+.table_title .table_row {
+  border-color: #ddd;
+  background-color: #f0f0f0;
+
+}
+
+.table_item:last-child {
+  border-right: none;
+}
+
+.table_row {
+  display: flex;
+}
+
+.table_item {
+  border-right: 1px solid #f0f0f0;
+  flex: 1;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rpx 0;
+}
+
+.syncOrderNutrientsError {
+  background-color: #fff;
+  padding: 12rpx 24rpx;
+}
+
+.productOrderUrl {
+  width: 100%;
+  height: 680rpx;
+  margin-bottom: 60rpx;
+}
+
+.cell-value-style {
+  color: #f00 !important;
+}
+
+.br15 view {
+  border-radius: 15rpx;
+}
+
+.btn-nutrients {
+  height: 124rpx;
+  position: fixed;
+  right: 0;
+  top: 200px;
+}
+
+.btn-nutrients image {
+  height: 124rpx;
+  width: 124rpx;
+}
+
+.process-main {
+  margin-top: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.process-items {
+  margin: 16px 0;
+}
+
+.process-name {
+  font-size: 15px;
+  font-family: "HarmonyOS Sans SC";
+  font-weight: 400;
+  color: #202020;
+}
+
+.consumption {
+  background: #ffffff;
+}
+
+.consumption .sports-num {
+  color: #ffbd09;
+}
+
+.consumption-items {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 14px;
+  font-family: HarmonyOS Sans SC-Regular, HarmonyOS Sans SC;
+  font-weight: 400;
+  color: #606060;
+  line-height: 14px;
+}
+
+.consumption .consumption-items .list-main {
+  min-width: 80px;
+  height: 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  width: 30%;
+  margin-right: 3%;
+}
+
+.list-main image {
+  width: 24px;
+  height: 24px;
+}
+
+.list-main div {
+  font-size: 14px;
+  font-family: HarmonyOS Sans SC-Regular, HarmonyOS Sans SC;
+  font-weight: 400;
+  color: #606060;
+  line-height: 30px;
+}
+
+.nutrition {
+  width: 343px;
+  min-height: 331px;
+  background: #ffffff;
+  box-shadow: 0px 2px 4px rgba(32, 32, 32, 0.1);
+  opacity: 1;
+  border-radius: 8px;
+  margin-top: 19px;
+  padding: 13px;
+  box-sizing: border-box;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+
+}
+
+.header-title .side {
+  width: 2px;
+  height: 16px;
+  background: linear-gradient(180deg, #52af80 0%, #4bd891 100%);
+  opacity: 1;
+  border-radius: 1px;
+}
+
+
+.header-title .editT {
+  font-size: 15px;
+  font-family: "HarmonyOS Sans SC";
+  font-weight: 400;
+  color: #2ab0e7;
+  margin-left: 159px;
+}
+
+.main-items {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.main-items .mainItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mainItem .items-name {
+  font-size: 15px;
+  font-family: "HarmonyOS Sans SC";
+  font-weight: 400;
+  line-height: 0px;
+  color: #202020;
+  opacity: 1;
+
+}
+
+.mainItem .items-name p {
+  font-size: 12px;
+  font-family: "HarmonyOS Sans SC";
+  font-weight: 400;
+  line-height: 0px;
+  color: #808080;
+  opacity: 1;
+}
+
+.mainItem .num1 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 46px;
+  color: #fa767e;
+  margin-top: 8px;
+}
+
+.mainItem .items-per {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #4bd891;
+}
+
+.mainItem .items-per2 {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 40px;
+  color: #4bd891;
+  margin-top: 8px;
+}
+
+.mainItem .num2 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 46px;
+  margin-top: 8px;
+  color: #faa164;
+}
+
+/* 折叠面板 */
+.classify-item {
+  margin-top: 10px;
+  height: 80rpx;
+  text-align: center;
+  font-size: 15px;
+  font-family: HarmonyOS Sans SC-Regular, HarmonyOS Sans SC;
+  font-weight: 400;
+  color: #808080;
+}
+
+.mainItem .num3 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 46px;
+  margin-top: 8px;
+  color: #77b760;
+}
+
+.content-title {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-top: 10px;
+}
+
+.content-title::before {
+  content: "";
+  width: 6rpx;
+  height: 32rpx;
+  border-radius: 4rpx;
+  position: absolute;
+  top: 14px;
+  left: -7px;
+  background: #72B15B;
+}
+
+#disfixed {
+  width: 100%;
+  position: fixed;
+  top: 1px;
+  height: 50px;
+  overflow: hidden;
+  z-index: 100;
+  margin: 0 auto;
+}
+
+.foodImg {
+  width: 55px;
+  height: 55px;
+  border-radius: 2%;
+  margin-right: 15px;
+}
+
+#disfixed .orderStatus,
+#disfixed .mini-font {
+  display: none;
+  z-index: 100;
+}

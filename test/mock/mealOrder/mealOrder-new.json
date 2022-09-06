@@ -1,0 +1,12 @@
+{
+  "usingComponents": {
+    "van-search": "../../assets/vant/search/index",
+    "van-icon": "../../assets/vant/icon/index",
+    "van-tabs": "../../assets/vant/tabs/index",
+    "van-tab": "../../assets/vant/tab/index"
+  },
+  "onReachBottomDistance": 10,
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarTitleText": "订单列表"
+}

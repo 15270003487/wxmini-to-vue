@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-search": "../../assets/vant/search/index",
+    "van-loading": "../../assets/vant/loading/index"
+  },
+  "onReachBottomDistance":10,
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarTitleText": "订单列表"
+}

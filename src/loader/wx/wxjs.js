@@ -21,9 +21,11 @@ const defaultConfig = require('../../config/default');
 module.exports = (code, options = defaultConfig) => {
   options.wxApiMap = options.wxApiMap || options.wxApiMap;
 
+  const wxs = options.wxs || [];
+
   const ast = parser.parse(code, {})
   traverse(ast, {
-    Identifier (path) {
+    Identifier(path) {
       const node = path.node;
       const nType = node.type;
       // BUG: 改变声明周期，这里会存在如果不是顶级（export default { **** }）的元素会导致更改错误的名称出现异常
@@ -33,7 +35,7 @@ module.exports = (code, options = defaultConfig) => {
         path.replaceWith(node);
       }
     },
-    ObjectProperty (path) {
+    ObjectProperty(path) {
       // BUG: 代码 已经存在 export default 的问题
       const node = path.node;
       // 对顶级的data做一个处理
@@ -50,8 +52,18 @@ module.exports = (code, options = defaultConfig) => {
         );
         path.replaceWith(node_new);
       }
+      // 处理函数属性
+      if (node.value.type === 'FunctionExpression') {
+        const node_new = bTypes.objectMethod(
+          "method",
+          node.key,
+          node.value.params,
+          node.value.body
+        );
+        path.replaceWith(node_new);
+      }
     },
-    ExpressionStatement (path) {
+    ExpressionStatement(path) {
       const node = path.node;
       const nExpression = node.expression;
       // BUG: 代码 已经存在 export default 的问题
@@ -63,7 +75,7 @@ module.exports = (code, options = defaultConfig) => {
         path.replaceWith(node_new);
       }
     },
-    ExportDefaultDeclaration (path) {
+    ExportDefaultDeclaration(path) {
       // BUG: 同上有bug
       // 这里执行是由于之前 ExpressionStatement 制造的
       if (path.node.isAction) return;
@@ -92,7 +104,7 @@ module.exports = (code, options = defaultConfig) => {
       node_new.isAction = true;
       path.replaceWith(node_new);
     },
-    CallExpression (path) {
+    CallExpression(path) {
       const node = path.node;
       const callee = node.callee;
       const _arguments = node.arguments;
@@ -105,7 +117,7 @@ module.exports = (code, options = defaultConfig) => {
         // BUG: 参数多个情况可能有个回调函数
         const [dataObjectExpression, callback] = _arguments;
         const dataProperties = dataObjectExpression.properties;
-        function memberExpressionMerge (array) {
+        function memberExpressionMerge(array) {
           const nextArray = array.filter((_, i) => i < array.length - 1);
           const _object = nextArray.length == 1 ? nextArray[0] : memberExpressionMerge(nextArray);
           const _property = array[array.length - 1];
@@ -184,7 +196,7 @@ module.exports = (code, options = defaultConfig) => {
         }
       }
     },
-    MemberExpression (path) {
+    MemberExpression(path) {
       const node = path.node
       const { object: _object, property: _property } = node;
       // 如果【xx】.data xx是this的话 就将当前node替换成this 如果不是就检查一下xx是不是 this的应用
@@ -206,7 +218,7 @@ module.exports = (code, options = defaultConfig) => {
             if (!currentPath) break;
             // 这里还是有bug
             currentPath.traverse({
-              VariableDeclarator (path) {
+              VariableDeclarator(path) {
                 // 检测一下左右
                 // 右边必须是this
                 // 左边必须是当前检测的名称
@@ -226,6 +238,35 @@ module.exports = (code, options = defaultConfig) => {
         // 如果检测结果 为真 则表示 xxx 为 this 并将当前node 替换为 _object
         if (isThis) {
           path.replaceWith(_object)
+        }
+      }
+    }
+  });
+
+  traverse(ast, {
+    ObjectMethod(path) {
+      const node = path.node;
+      if (node.key.name === 'data') {
+        if (bTypes.isBlockStatement(node.body)) {
+          // traverse()
+          // parser()
+          wxs.forEach(item => {
+            const itemAst = parser.parse(item.code);
+            // itemAst
+            traverse(itemAst, {
+              ExpressionStatement(path) {
+                const node = path.node;
+                if (bTypes.isMemberExpression(node.expression.left) && node.expression.left.object.name === 'module' && node.expression.left.property.name === 'exports') {
+                  node.expression.left.object.name = 'this';
+                  node.expression.left.property.name = item.module;
+                }
+              }
+            })
+            node.body.body.unshift(...itemAst.program.body);
+          })
+
+
+          path.replaceWith(node)
         }
       }
     }

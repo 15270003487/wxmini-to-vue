@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "van-field": "../../../assets/vant/field/index",
+    "van-cell": "../../../assets/vantNew/cell/index"
+  },
+  "navigationBarTitleText": "订单详情"
+}

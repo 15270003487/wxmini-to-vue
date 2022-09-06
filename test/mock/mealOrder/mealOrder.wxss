@@ -1,0 +1,129 @@
+/* pages/mealOrder/mealOrder.wxss */
+.content {
+  /* height: 100%; */
+  background-color: #F4F4F4;
+}
+
+.search-bg {
+  padding: 0 !important;
+}
+
+.header {
+  margin-top: 1%;
+  border-radius: 30rpx;
+  margin: 0 20rpx;
+  box-shadow: 0px 10rpx 4rpx 0rpx rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 9px;
+  z-index: 10;
+  background-color: #fff;
+
+}
+
+.main {
+  margin-top: 1%;
+  background-color: white;
+  border-radius: 10rpx;
+  margin: 40rpx 20rpx;
+  margin-bottom: 36rpx;
+  box-shadow: 0px 4rpx 8rpx 0rpx rgba(0, 0, 0, 0.08);
+  border: 1px solid #fafafa;
+}
+
+.main-header {
+  padding: 20rpx;
+  position: relative;
+  font-size: 26rpx;
+}
+
+.main-header:after {
+  content: '';
+  width: 95%;
+  height: 1rpx;
+  border-bottom: 1px solid #ccc;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+}
+
+.main-content {
+  padding: 20rpx;
+}
+
+.main-content-header {
+  font-size: 24rpx;
+  margin: 2% 0;
+}
+
+.main-content-footer {
+  margin-top: 4%;
+}
+
+.orderBtn {
+  justify-content: flex-end;
+}
+
+.mini-btn {
+  font-weight: bold;
+  font-size: 28rpx;
+  border: 1rpx solid #ccc;
+  border-radius: 10rpx;
+  width: 160rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #434245;
+}
+
+.mini-btn:first-child {
+  margin-right: 10rpx;
+}
+
+/* .noorder{
+  background-color: red;
+  height: 100%;
+  width: 100%;
+  background-image: url('../../images/noorder.png');
+} */
+.normal-font {
+  font-size: 26rpx;
+  color: #434245;
+}
+
+.normal-font .red {
+  font-size: 40rpx;
+  color: #333;
+  /* color: #ff1200; */
+  /* font-weight: bold; */
+}
+
+.loading {
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: center;
+  font-size: 26rpx;
+  align-items: center;
+}
+
+.loading-content {
+  position: relative;
+}
+
+.loading-content::after, .loading-content::before {
+  height: 1px;
+  width: 50px;
+  content: "";
+  display: block;
+  background-color: #ADABAC;
+  position: absolute;
+  bottom: 50%;
+}
+
+.loading-content::after {
+  right: -55px;
+}
+
+.loading-content::before {
+  left: -55px;
+}

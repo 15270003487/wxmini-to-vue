@@ -1,0 +1,105 @@
+<wxs module="we">
+  var toFixed = function (value) {
+    return value.toFixed(2);
+  }
+  // 支持退款的状态
+  var toCancel = function (value) {
+    // return ['预定中', '待叫号', '已叫号', '待堂食'].indexOf(value) > -1;
+    return ['预定中'].indexOf(value) > -1;
+  }
+  var indexOfOrderType = function (value) {
+    return [4, 16, 19].indexOf(value) > -1
+  }
+  module.exports = {
+    toFixed: toFixed,
+    toCancel: toCancel,
+    indexOfOrderType: indexOfOrderType
+  }
+</wxs>
+<view class="meal-order">
+  <view wx:if="{{false}}">
+    <view style="display:flex;background:#fff" wx:if="{{issearch}}">
+      <van-tabs bind:click="onClickTabs" color="#fff" tab-active-class="tabsClass" style="width:86%">
+        <van-tab title="全部" index="0"></van-tab>
+        <van-tab title="已完成" index="1"></van-tab>
+        <van-tab title="待评价" index="2"></van-tab>
+        <van-tab title="退款" index="3"></van-tab>
+      </van-tabs>
+      <van-icon name="search" color="#2AB0E7" size="22px" style="margin-top:10px" bindtap="onActiveSearch" />
+    </view>
+
+    <van-search wx:else shape="round" value="{{keyword}}" placeholder="请输入店铺名称" bindsearch="onSearch" bindclear="onClear" />
+  </view>
+
+
+
+  <view class="flex flex-d-c" wx:for="{{orderData}}" wx:key="orderNo">
+    <view class="order-data-seven" wx:if="{{item.orderType==7||item.orderType==2}}">
+      <view class="order-top flex flex--between">
+        <view class="order-text">
+          <text class="order-top-text">{{item.branchName}}
+          </text>
+        </view>
+        <view class="orderStatus" wx:if="{{item.orderType!=20}}" style="background:{{item.reserveStatusName=='已完成'?'linear-gradient(272deg, #2AB0E7 0%, #0083B9 100%)':item.reserveStatusName=='已退款'?'linear-gradient(270deg, #F58E6E 0%, #E94141 100%)':'#ccc'}}">
+          {{item.reserveStatusName}}</view>
+        <view class="orderStatus" wx:else style="background:{{item.payStatusName=='已完成'?'linear-gradient(272deg, #2AB0E7 0%, #0083B9 100%)':item.payStatusName=='已退款'?'linear-gradient(270deg, #F58E6E 0%, #E94141 100%)':'#ccc'}}">
+          {{item.payStatusName}}</view>
+      </view>
+      <view class="order-countall">
+        <view class="order-count">
+          <view>订单号：{{item.orderNo}}</view>
+          <view>订单时间：{{item.payTime}}</view>
+        </view>
+        <view class="flex flex-d-c flex--center order-countall-right">
+          <text style="color: #2071C5">￥{{we.toFixed(item.realFee/100)}}</text>
+          <text>共{{item.totalQuantity}}件</text>
+        </view>
+      </view>
+    </view>
+    <view class="order-data" wx:else>
+      <view class="order-top flex flex--between">
+        <view class="flex order-top-count">
+          <image src="../../images/null.png" />
+          <view class="flex flex-d-c">
+            <text style="height: 18px;overflow: hidden;">{{item.branchName}}</text>
+            <text>{{item.payTime}}</text>
+          </view>
+          <van-icon name="arrow" color="#000000" size="15px" style="margin-top:1px" />
+        </view>
+        <view class="orderStatus" wx:if="{{item.orderType!=20}}" style="background:{{item.reserveStatusName=='已完成'?'linear-gradient(272deg, #2AB0E7 0%, #0083B9 100%)':item.reserveStatusName=='已退款'?'linear-gradient(270deg, #F58E6E 0%, #E94141 100%)':'#ccc'}}">
+          {{item.reserveStatusName}}</view>
+        <view class="orderStatus" wx:else style="background:{{item.payStatusName=='已完成'?'linear-gradient(272deg, #2AB0E7 0%, #0083B9 100%)':item.payStatusName=='已退款'?'linear-gradient(270deg, #F58E6E 0%, #E94141 100%)':'#ccc'}}">
+          {{item.payStatusName}}</view>
+      </view>
+
+      <view class="order-center">
+        <view class="flex" wx:if="{{item.itemList.length > 0 }}">
+          <view wx:for="{{item.itemList}}" wx:for-item="i" wx:key="index">
+            <image src="{{i.productPic||'../../images/null.png'}}" />
+            <text>{{i.productName}}</text>
+          </view>
+        </view>
+        <view class="flex flex-d-c flex--center">
+          <text style="color: #2071C5">￥{{we.toFixed(item.realFee/100)}}</text>
+          <text>共{{item.totalQuantity}}件</text>
+        </view>
+      </view>
+
+      <view class="order-btn">
+        <text class="meal-num" wx:if="{{item.mealTakingNum && we.indexOfOrderType(item.orderType)}}">
+          取餐号:{{item.mealTakingNum}}
+        </text>
+        <text class="meal-num" wx:if="{{item.waitingISNum}}">
+          当前号码:{{item.waitingISNum}}
+        </text>
+        <view class="flex">
+          <view class="mini-btn" wx:if="{{we.toCancel(item.reserveStatusName)&&item.branchId!=718}}" data-index="{{index}}" bindtap="handleCancel">取消订单</view>
+          <view class="mini-btn" bindtap="goDetails" data-index="{{index}}">
+            订单详情
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <text class="reach-bottom" hidden="{{reachBottom}}">没有更多数据了</text>
+</view>

@@ -1,0 +1,69 @@
+<!--pages/mealOrder/mealOrder.wxml-->
+<view class="content">
+  <view class="header">
+    <van-search value="{{ keyword }}" placeholder="请输入搜索订单号" use-action-slot bind:change="onChange"
+      bind:search="onSearch" custom-class=' search-bg'>
+      <view slot="action" bind:tap="onClick">搜索</view>
+    </van-search>
+  </view>
+
+  <block wx:for="{{orderData}}" wx:key="orderNo">
+    <!-- hidden="{{dataLength == 0?true:false}}" -->
+    <view class="main">
+      <view class="main-header flex flex--between">
+        <view>{{item.branchName}}</view>
+        <view class="mini-font">{{item.reserveStatusName == null? '已完成':item.reserveStatusName}}</view>
+      </view>
+      <view class="main-content">
+        <view class="main-content-header flex flex--between">
+          <view>订单号:{{item.orderNo}}</view>
+          <view class="mini-font" wx:if="{{item.orderType != 2}}">共{{item.totalQuantity}}项菜品</view>
+        </view>
+        <view class="main-content-centent flex flex--between">
+          <view>
+            <view class="mini-font">订单时间: {{item.payTime}}</view>
+            <view class="mini-font" wx:if="{{item.targetDate && (item.orderType == 4 || item.orderType == 16) }}">用餐时间: {{item.targetDate}}</view>
+          </view>
+          <!-- 保留两位小数 -->
+          <wxs module="we">
+            var toFixed = function (value) {
+              return value.toFixed(2);
+            }
+            module.exports = {
+              toFixed: toFixed
+            }
+          </wxs>
+          <view class="normal-font">
+            <text class="red">￥{{we.toFixed(item.realFee/100)}}</text>
+          </view>
+        </view>
+        <view class="main-content-footer fslex flex--between">
+
+          <block wx:if="{{item.mealTakingNum}}">
+            <view class="normal-font flex__item"
+              wx:if="{{ item.orderType == 4 || item.mealType == 2 || item.mealType == 1 }}">取餐号：<text
+                class="red">{{item.mealTakingNum  || '' }}</text></view>
+          </block>
+
+          <view class="orderBtn flex__item flex">
+            <!-- wx:if="{{item.reserveStatusName==cancerOrder?true:false}}"  取消订单是否显示 -->
+            <!-- <view class="mini-btn" wx:if="{{item.reserveStatusName==cancerOrder?true:false}}" data-index="{{index}}"
+              bindtap="handleCancel">取消订单</view> -->
+            <view class="mini-btn" bindtap="goDetails" data-index="{{index}}"
+              hidden="{{item.orderType == 1 ?false:(item.orderType == 4 ?false:(item.orderType == 5 ?false:(item.orderType == 8 ?false:(item.orderType == 16 ?false:true))))}}">
+              订单详情</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view hidden="{{!loading && !textShow}}">
+    <view class="loading" hidden="{{!loading || !lastOrderNo}}">
+      <van-loading color="#1989fa" size="24px"/>加载中...
+    </view>
+    <view class="loading" hidden="{{!textShow}}">
+      <text class="loading-content">没有更多数据了</text>
+    </view>
+  </view>
+  <!-- <button bindtap="jkl">加载更多</button> -->
+</view>

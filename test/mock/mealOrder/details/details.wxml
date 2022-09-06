@@ -1,0 +1,244 @@
+<!--pages/mealOrder/details/details.wxml-->
+<!-- 保留两位小数 -->
+<wxs module="we">
+  var toFixed = function (value) {
+    return (value || 0).toFixed(2);
+  }
+  var targetDateF = function (orderData) {
+    return (orderData.targetDate || '').replace(' ', ' ').split(' ').join(' ' + (orderData.mealTime || ' ') + ' ')
+  }
+  var indexOfOrderType = function (value) {
+    return [4, 16, 19].indexOf(value) > -1
+  }
+  module.exports = {
+    targetDateF: targetDateF,
+    toFixed: toFixed,
+    indexOfOrderType: indexOfOrderType
+  }
+</wxs>
+<!-- all -->
+<view class="content">
+  <!-- 排队 -->
+  <view class="main-top" wx:if="{{orderData.orderType!=20}}">
+    <view>当前叫号：{{WaitingISNum}} </view>
+    <view>排队人数：{{WaitingNum}} </view>
+    <view>预计时间：{{WaitingTime}}</view>
+  </view>
+  <view class="main" id="{{isdisfixed?'disfixed':''}}" bindtap="isdisfixedFun">
+
+    <view class="main-header flex flex--between">
+      <text class="viewbtn viewbtn1">{{orderData.branchName}}</text>
+      <view class="orderStatus" wx:if="{{orderData.orderType!=20}}">{{orderData.statusName}}</view>
+      <view class="orderStatus" wx:else="{{orderData.orderType!=20}}">{{orderData.payStatusName}}</view>
+    </view>
+    <view class="main-content">
+      <view class="main-content-header flex flex--between">
+        <view class="black">订单号: </view>
+        <view class="gray">{{orderData.orderNo}}</view>
+      </view>
+      <view class="main-content-header flex flex--between">
+        <view class="black">订单时间: </view>
+        <view class="gray">{{orderData.createTime || ''}}</view>
+      </view>
+      <view class="main-content-centent flex flex--between" wx:if="{{orderData.targetDate&&orderData.orderType!=20}}">
+        <view class="black">用餐时间: </view>
+        <view class="gray">{{we.targetDateF(orderData)}}</view>
+      </view>
+      <view class="main-content-centent flex flex--between" wx:if="{{orderData.takeFoodStatusName&&orderData.isMeals}}">
+        <view class="black">存餐状态: </view>
+        <view class="gray">{{orderData.takeFoodStatusName}}</view>
+      </view>
+      <view class="main-content-footer flex flex--x-center flex-d-c" wx:if="{{orderData.mealTakingNum && we.indexOfOrderType(orderData.orderType)}}">
+        <canvas wx:if="{{we.indexOfOrderType(orderData.orderType)}}" style="width: 100px; height: 100px;" canvas-id="myQrcode"></canvas>
+        <view class="normal-font" wx:if="{{orderData.mealType==2 || orderData.mealType==1}}">
+          取餐号：{{orderData.mealTakingNum || ''}}</view>
+        <view class="normal-font" wx:if="{{false}}">二维码</view>
+      </view>
+    </view>
+  </view>
+  <view style="{{isdisfixed?'margin-top: 60px;':''}}">
+  </view>
+  <view class="main">
+    <view class="foodCon">
+      <view class="viewbtn viewbtn1">菜品详情</view>
+      <view class="imageClass" wx:if="{{false}}" bindtap="toNutrients">
+        <image src="http://img.binguoai.com/tmp/Mj9q4BswoOZU2d6e55c715fa7048bf642bbcaaf98dae.png"></image>
+        <view style="margin-left: 45px;">营养数据</view>
+      </view>
+    </view>
+    <block wx:for="{{orderData.itemList}}" wx:key="index">
+      <view class="menu flex" wx:if="{{orderData.orderType!=20}}">
+        <view class="foodImg">
+          <image src="{{item.productPic}}"></image>
+        </view>
+        <view class="flex__item2 ">
+          <view class="black"> {{item.productName}}</view>
+          <view class="gray">x{{item.quantity || '0'}}</view>
+        </view>
+
+        <view class="imageClass" wx:if="{{merchantConfig.nutrientMerchant && showNutrients}}" bindtap="toNutrients" data-index="{{item}}">
+          <image src="http://img.binguoai.com/tmp/Mj9q4BswoOZU2d6e55c715fa7048bf642bbcaaf98dae.png"></image>
+          <view style="margin-left: 45px;">营养数据</view>
+        </view>
+        <view class="flex__item2 flex flex--end black">￥{{we.toFixed(item.fee/100) || '0'}}</view>
+      </view>
+      <view class="menu flex" wx:else>
+        <view class="foodImg">
+          <image src="{{item.productPic}}"></image>
+        </view>
+        <view class="flex__item2 ">
+          <view class="black"> {{item.productName}}</view>
+          <view class="gray">x{{item.quantity || '0'}}克</view>
+        </view>
+        <view>
+          <view class="flex__item2 flex flex--end">￥{{we.toFixed(item.fee/10000) || '0'}}</view>
+          <view class="imageClass" wx:if="{{merchantConfig.nutrientMerchant && showNutrients}}" bindtap="toNutrients" data-index="{{item}}">
+            <view style="margin-left: 5px;">营养查看<text style="margin-left: 5px;font-size: 13px;">></text></view>
+          </view>
+        </view>
+      </view>
+
+    </block>
+    <view class="menu foodmenu">
+      <view class="flex flex--between" hidden="{{!discount}}">
+        <view>优惠</view>
+        <view>-￥{{we.toFixed(discount/100)}}</view>
+      </view>
+      <view class="flex flex--between" hidden="{{!orderData.packFee}}">
+        <view>打包费</view>
+        <view>￥{{we.toFixed(orderData.packFee/100)}}</view>
+      </view>
+      <view class="flex flex--between" hidden="{{!orderData.deliveryFee}}">
+        <view>配送费</view>
+        <view>￥{{we.toFixed(orderData.deliveryFee/100)}}</view>
+      </view>
+      <view class="flex flex--between" hidden="{{!orderData.warmFee}}">
+        <view>加热费</view>
+        <view>￥{{we.toFixed(orderData.warmFee/100)}}</view>
+      </view>
+      <view class="flex flex--between" hidden="{{!orderData.sideBoardFee}}">
+        <view>存餐费</view>
+        <view>￥{{we.toFixed(orderData.sideBoardFee/100)}}</view>
+      </view>
+    </view>
+    <view class="total padding20">
+      <view class="flex">
+        <view class="flex__item2 gray">共{{orderData.itemList.length}}项菜品</view>
+        <view class="flex__item2 flex flex--end price">
+          <view class="pricetext">合计￥</view>
+          <view class="price">{{we.toFixed(orderData.realFee/100)}}</view>
+        </view>
+      </view>
+      <view class="flex flex--between m-font gray">
+        <view>支付方式</view>
+        <view>{{orderData.payType}}</view>
+      </view>
+    </view>
+  </view>
+  <view class="process-main main" wx:if="{{merchantConfig.nutrientMerchant && showNutrients}}">
+    <view class="header-title">
+      <view class="text  viewbtn viewbtn1">订单营养成分</view>
+    </view>
+
+    <view class="main-items">
+      <view class="mainItem" wx:for="{{nutritionArr}}" wx:key="index">
+        <view class="items-name">
+          {{ item.name }}<p>({{ item.unit }})</p>
+        </view>
+        <view class="{{numColor[index]}}" wx:if="{{item.name!='热量'}}">
+          {{ item.netContent }}
+        </view>
+      </view>
+    </view>
+
+    <view style="display: block;">
+      <view class="process-items" wx:for="{{processArr}}" wx:key="index" hidden="{{!selectedFlag}}">
+        <view class="process-name">{{ item.name }}</view>
+        <view class="progress-box">
+          <progress percent="{{item.netContent}}" border-radius="10" color="{{color[index]}}" show-info="{{false}}" stroke-width="10" font-size="14" />
+          <view class="proClass">{{item.netContent}}{{item.unit}}</view>
+        </view>
+      </view>
+      <view class="classify-item" data-index="0" bindtap='changeToggle'>
+        <view wx:if="{{!selectedFlag}}">查看更多营养元素</view>
+        <view wx:else>收起</view>
+        <view wx:if="{{!selectedFlag}}">
+          <image style="width: 10px;height: 7px;" src="../../../images/Mid_btn_more@1xpng.png"></image>
+        </view>
+        <view wx:else>
+          <image style="width: 10px;height: 7px;transform:rotate(180deg)" src="../../../images/Mid_btn_more@1xpng.png"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+
+  <view class="consumption main process-main" wx:if="{{merchantConfig.nutrientMerchant && showNutrients}}">
+    <view class="content-title viewbtn viewbtn1 black">本订单摄入<p class="sports-num">{{energyNum||0}}</p>千卡对应运动消耗</view>
+    <view class="consumption-items">
+      <view class="list-main" wx:for="{{exercise}}" wx:key="index">
+        <image src="{{item.url}}" alt="" />
+        <view>{{item.name}}{{item.num}}分钟</view>
+      </view>
+    </view>
+
+  </view>
+  <!-- 
+  <view class="consumption main process-main" wx:if="{{merchantConfig.nutrientMerchant && showNutrients}}">
+    <view class="content-title viewbtn viewbtn1 black">摄入<p class="sports-num">{{energyNum}}</p>千卡对应运动消耗</view>
+
+
+  </view> -->
+
+  <view class="br15" style="margin: 24rpx auto 0 auto; width: 694rpx;">
+    <!-- TODO: 个人地址暂未做处理 -->
+    <van-cell-group style="margin-bottom: 24rpx" wx:if="{{(orderData.multiLevelCategory && orderData.multiLevelCategory.allName) || orderData.takeawayAddress.address}}">
+      <van-field value="{{ (orderData.multiLevelCategory && orderData.multiLevelCategory.allName) || orderData.takeawayAddress.address }}" label="订单地址:" autosize disabled border="{{ false }}" />
+    </van-cell-group>
+  </view>
+
+  <view class="br15" style="margin: 24rpx auto 0 auto; width: 694rpx;">
+    <!-- 配送时间 -->
+    <van-cell-group style="margin-bottom: 24rpx" wx:if="{{orderData.deliveryTimeStr}}">
+      <van-field value="{{ orderData.deliveryTimeStr }}" label="配送时间:" autosize disabled border="{{ false }}" />
+    </van-cell-group>
+  </view>
+
+  <view style="margin:auto;margin-top: 24rpx;width:694rpx;background-color:white;border-radius: 15rpx;" wx:if="{{orderData.note}}">
+    <!-- <van-cell-group>
+      <van-field value="{{ orderData.note || '未填写备注' }}" label="订单备注:" type="textarea" autosize disabled
+        border="{{ false }}" />
+    </van-cell-group> -->
+    <view style="font-size:14px;padding:10px 10px;">
+      <!-- <view style="width:100px">订单备注:</view> -->
+      <text class="viewbtn viewbtn1">订单备注：</text>
+
+      <textarea style="margin-left:20px;height:160rpx" value="{{ orderData.note || '未填写备注' }}" disabled>
+      </textarea>
+    </view>
+  </view>
+
+
+  <view class="br15" style="margin: 24rpx auto 0; width: 694rpx">
+    <!-- 退款 -->
+    <van-cell-group style="margin-bottom: 24rpx" wx:if="{{orderData.refundStatus}}">
+      <van-cell center title="{{orderData.refundStatusDesc}}" value="退款金额 ¥{{ we.toFixed(orderData.refundFee/100)}}" value-class="cell-value-style" label="{{orderData.refundTime}}" />
+      <!-- <van-field value="{{  }}" label="{{}}" type="textarea" autosize disabled border="{{ false }}" /> -->
+    </van-cell-group>
+  </view>
+
+  <View wx:if="{{orderData.productOrderUrl}}" class="productOrderUrl">
+    <image src="{{ orderData.productOrderUrl }}" bindtap="bindTapShowImage" />
+  </View>
+
+  <view class="footer" wx:if="{{orderData.statusName=='已完成' && merchantConfig.commentMerchant}}">
+    <view class="actions" style="color:#2AB1E7">
+      <view class="action-item active" bindtap="handleClickAction" data-type="0" wx:if="{{!isComment}}">评价订单</view>
+      <view class="action-item" bindtap="handleClickAction" data-type="1" wx:if="{{isComment}}">查看评价</view>
+    </view>
+  </view>
+
+  <!-- <view wx:if="{{merchantConfig.nutrientMerchant && showNutrients}}" class="btn-nutrients" style="transform: translateY({{y}}px)" catchtouchmove="touchmove" bindtap="toNutrients">
+    <image src="http://img.binguoai.com/tmp/Mj9q4BswoOZU2d6e55c715fa7048bf642bbcaaf98dae.png"></image>
+  </view> -->
+</view>

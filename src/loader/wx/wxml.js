@@ -11,7 +11,7 @@ const htmlparser2 = require("htmlparser2");
 const domSerializer = require('dom-serializer').default;
 const FAKE_ROOT = Symbol.for('fake-root');
 const defaultConfig = require('../../config/default');
-
+const wxjs = require('./wxjs');
 
 /**
  *
@@ -20,7 +20,7 @@ const defaultConfig = require('../../config/default');
  */
 module.exports = (code, options = defaultConfig) => {
   options.elementMap = options.elementMap || defaultConfig.elementMap;
-
+  const wxsList = [];
   /**
    *
    * @param {string} doc
@@ -144,6 +144,29 @@ module.exports = (code, options = defaultConfig) => {
 
   }
 
+  /**
+   * 标签转换
+   * @param {*} node
+   */
+  const transformWxs = (node) => {
+    if (node.type !== 'tag') return;
+    if (node.name !== 'wxs') return;
+    // 转换为 注释
+    node.type = 'comment';
+    node.data = ' wxs ';
+    // TODO: 通过wxjs解析
+    // wxjs
+    node.children.forEach(item => {
+      if (item.type === 'text') {
+        wxsList.push({
+          module: node.attribs.module,
+          code: item.data
+        })
+      }
+    });
+    return node;
+  }
+
   const transformTree = (tree) => {
 
     if (!tree) return tree
@@ -166,6 +189,8 @@ module.exports = (code, options = defaultConfig) => {
     transformAttr(tree)
     // TODO: 内容
     transformContent(tree)
+    // wxs 转换
+    transformWxs(tree)
 
     return tree;
   }
@@ -174,8 +199,9 @@ module.exports = (code, options = defaultConfig) => {
   const treeNode = parser(code);
 
   const tree = transformTree(treeNode)
-
   const output = domSerializer(tree.children, {})
-
-  return output;
+  return {
+    code: output,
+    wxsList
+  };
 }
