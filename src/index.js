@@ -17,8 +17,8 @@ module.exports = class {
    */
   constructor(type = 'wx', options = defaultConfig) {
     if (typeof type === 'object') {
-      type = 'wx';
       options = type;
+      type = 'wx';
     }
     this.type = type;
     this.options = Object.assign({}, defaultConfig, options);
