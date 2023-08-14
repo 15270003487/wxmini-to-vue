@@ -10,10 +10,11 @@ const wxml = require('../../../src/loader/wx/wxml')
 describe('loader/wx/wxml', () => {
 
   test('检测转换', () => {
-    const { code } = wxml('<view><text>111</text></view>')
+    const { code } = wxml('<view><text>111中文</text></view>')
     expect(typeof code).toBe('string')
-    expect( /div/.test(code)).toBe(true)
-    expect( /span/.test(code)).toBe(true)
+    expect(/div/.test(code)).toBe(true)
+    expect(/span/.test(code)).toBe(true)
+    expect(/中文/.test(code)).toBe(true)
   });
 
 
@@ -27,11 +28,11 @@ describe('loader/wx/wxml', () => {
         toFixed: toFixed
       }
     </wxs>
-    <view><view>{{ttt.toFixed(123.22)}}</view></view>
+    <view><view>{{ttt.toFixed(123.22)}}中文</view></view>
     `)
     expect(typeof code).toBe('string')
-    expect( /module="ttt"/.test(code)).toBe(false)
-    expect( /<!--\s?wxs\s?-->/.test(code)).toBe(true)
+    expect(/module="ttt"/.test(code)).toBe(false)
+    expect(/<!--\s?wxs\s?-->/.test(code)).toBe(true)
   });
 
 });

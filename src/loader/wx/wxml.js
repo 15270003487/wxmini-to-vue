@@ -31,7 +31,7 @@ module.exports = (code, options = defaultConfig) => {
       xmlMode: false,
       lowerCaseAttributeNames: false,
       recognizeSelfClosing: true,
-      lowerCaseTags: false
+      lowerCaseTags: false,
     });
     parser.end(doc);
 
@@ -199,7 +199,12 @@ module.exports = (code, options = defaultConfig) => {
   const treeNode = parser(code);
 
   const tree = transformTree(treeNode)
-  const output = domSerializer(tree.children, {})
+  const output = domSerializer(tree.children, {
+    xmlMode: false,
+    emptyAttrs: false,
+    selfClosingTags: false,
+    decodeEntities: false,
+  })
   return {
     code: output,
     wxsList
